@@ -1,5 +1,5 @@
 
-# QuizSite - A Django-based Quiz Application
+# QuizWorld - A Django-based Quiz Application
 
 ## Overview
 QuizSite is a web-based quiz application built with Django. Users can register or log in to access a variety of quiz categories. Upon selecting a category, random questions are presented from the database. After completing the quiz, the user can view their score.
