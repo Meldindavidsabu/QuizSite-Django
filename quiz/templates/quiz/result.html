@@ -1,0 +1,72 @@
+{% extends 'quiz/base.html' %}
+
+{% block title %}Quiz Results{% endblock %}
+
+{% block content %}
+<!-- Navigation buttons for only the result page -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" style="font-weight: bold; color: #28a745;">Quiz Results</a>
+    
+    <div class="ml-auto d-flex align-items-center">
+        {% if user.is_authenticated %}
+            
+            <!-- Logout form using POST method -->
+            <form action="{% url 'quiz:logout' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                
+            </form>
+        {% else %}
+            <a href="{% url 'quiz:register' %}" class="btn btn-info mr-3">Register</a>
+            <a href="{% url 'quiz:login' %}" class="btn btn-info">Login</a>
+        {% endif %}
+    </div>
+</nav>
+<div class="logout-container">
+    <form action="{% url 'quiz:logout' %}" method="post" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Logout</button>
+        <a href="{% url 'quiz:start_quiz' %}" class="btn btn-info mr-3">Home</a>
+
+
+    </form> 
+</div>
+
+<!-- Quiz Results Section -->
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Quiz Results</h1>
+
+    <div class="alert alert-info">
+        <p><strong>{{ message }}</strong></p>
+        <p><strong>Total Questions Answered:</strong> {{ total_questions }}</p>
+        <p><strong>Correct Answers:</strong> {{ correct_answers }}</p>
+        <p><strong>Incorrect Answers:</strong> {{ incorrect_answers }}</p>
+        <p><strong>Score Percentage:</strong> {{ percentage }}%</p>
+    </div>
+
+    <h2 class="mt-4">Quiz Details</h2>
+    <ul class="list-group">
+        {% for submission in submissions %}
+            <li class="list-group-item">
+                <strong>Question:</strong> {{ submission.question.question_text }} <br>
+                <strong>Your Answer:</strong> {{ submission.user_answer }} <br>
+                <strong>Correct Answer:</strong> {{ submission.question.correct_option }} <br>
+                <span class="badge {% if submission.is_correct %}badge-success{% else %}badge-danger{% endif %}">
+                    {% if submission.is_correct %}✅ Correct{% else %}❌ Incorrect{% endif %}
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3 class="mt-4">Additional Insights</h3>
+    <p>Review Your Answers: Make sure you understand the questions you got wrong to improve in the future.</p>
+
+    <a href="{% url 'quiz:start_quiz' %}" class="btn btn-success">Restart Quiz</a>
+</div>
+<style>
+.logout-container {
+    float: right;
+    margin-right: 20px; 
+}
+
+</style>
+{% endblock %}
